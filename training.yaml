@@ -38,6 +38,6 @@ TRAINING:
   RESUME: False
   TRAIN_PS: 256
   VAL_PS: 256
-  TRAIN_DIR: './content/drive/MyDrive/SUNet/datasets/Denoising_DIV2K/train'       # path to training data
-  VAL_DIR: './content/drive/MyDrive/SUNet/datasets/Denoising_DIV2K/test' # path to validation data
-  SAVE_DIR: './content/drive/MyDrive/SUNet/checkpoints'           # path to save models and images
+  TRAIN_DIR: '/content/drive/MyDrive/SUNet/datasets/Denoising_DIV2K/train'       # path to training data
+  VAL_DIR: '/content/drive/MyDrive/SUNet/datasets/Denoising_DIV2K/test' # path to validation data
+  SAVE_DIR: '/content/drive/MyDrive/SUNet/checkpoints'           # path to save models and images
