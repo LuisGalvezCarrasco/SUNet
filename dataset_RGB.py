@@ -37,8 +37,8 @@ class DataLoaderTrain(Dataset):
         inp_path = self.inp_filenames[index_]
         tar_path = self.tar_filenames[index_]
 
-        inp_img = tiff.imread(inp_path).float()   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB), also setted to be float32 for compatibility with the model parameters dtype 
-        tar_img = tiff.imread(tar_path).float()   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB), also setted to be float32 for compatibility with the model parameters dtype 
+        inp_img = tiff.imread(inp_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB)
+        tar_img = tiff.imread(tar_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB) 
 
         #inp_img = Image.open(inp_path).convert('RGB')  #luis comment
         #tar_img = Image.open(tar_path).convert('RGB')  #luis comment
@@ -51,8 +51,8 @@ class DataLoaderTrain(Dataset):
 
         # numpy arrays to tensors
 
-        inp_img = TF.to_tensor(inp_img)
-        tar_img = TF.to_tensor(tar_img)
+        inp_img = TF.to_tensor(inp_img).float() #, also setted to be float32 for compatibility with the model parameters dtype 
+        tar_img = TF.to_tensor(tar_img).float() #, also setted to be float32 for compatibility with the model parameters dtype 
 
         # Reflect Pad in case image is smaller than patch_size
         if padw != 0 or padh != 0:
@@ -127,15 +127,15 @@ class DataLoaderVal(Dataset):
         tar_path = self.tar_filenames[index_]
 
 
-        inp_img = tiff.imread(inp_path).float()   #luis tiff to numpy array (not necessary convert to RGB because it already is), also setted to be float32 for compatibility with the model parameters dtype 
-        tar_img = tiff.imread(tar_path).float()   #luis tiff to numpy array (not necessary convert to RGB because it already is) , also setted to be float32 for compatibility with the model parameters dtype 
+        inp_img = tiff.imread(inp_path) #luis tiff to numpy array (not necessary convert to RGB because it already is) 
+        tar_img = tiff.imread(tar_path) #luis tiff to numpy array (not necessary convert to RGB because it already is) 
 
         #inp_img = Image.open(inp_path).convert('RGB')
         #tar_img = Image.open(tar_path).convert('RGB')
         
         #numpy array to tensor
-        inp_img = TF.to_tensor(inp_img)
-        tar_img = TF.to_tensor(tar_img)
+        inp_img = TF.to_tensor(inp_img).float() #luis: also setted to be float32 for compatibility with the model parameters dtype 
+        tar_img = TF.to_tensor(tar_img).float() #luis: also setted to be float32 for compatibility with the model parameters dtype 
 
         # Validate on center crop
         if self.ps is not None:
@@ -167,8 +167,8 @@ class DataLoaderTest(Dataset):
         path_inp = self.inp_filenames[index]
         filename = os.path.splitext(os.path.split(path_inp)[-1])[0]
         #inp = Image.open(path_inp).convert('RGB')  # luis
-        inp = tiff.imread(inp_path).float()  # luis: 
+        inp = tiff.imread(inp_path)  # luis: 
 
-        inp = TF.to_tensor(inp)
+        inp = TF.to_tensor(inp).float() #luis: added .float, setted to be float32 for compatibility with the model parameters dtype 
         inp.type('torch.DoubleTensor')
         return inp, filename
