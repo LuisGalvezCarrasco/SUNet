@@ -37,8 +37,8 @@ class DataLoaderTrain(Dataset):
         inp_path = self.inp_filenames[index_]
         tar_path = self.tar_filenames[index_]
 
-        inp_img = tiff.imread(inp_path)   #luis tiff to numpy array
-        tar_img = tiff.imread(tar_path)   #luis tiff to numpy array
+        inp_img = tiff.imread(inp_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB)
+        tar_img = tiff.imread(tar_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is RGB)
 
         #inp_img = Image.open(inp_path).convert('RGB')  #luis comment
         #tar_img = Image.open(tar_path).convert('RGB')  #luis comment
@@ -126,16 +126,24 @@ class DataLoaderVal(Dataset):
         inp_path = self.inp_filenames[index_]
         tar_path = self.tar_filenames[index_]
 
-        inp_img = Image.open(inp_path).convert('RGB')
-        tar_img = Image.open(tar_path).convert('RGB')
+
+        inp_img = tiff.imread(inp_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is)
+        tar_img = tiff.imread(tar_path)   #luis tiff to numpy array (not necessary convert to RGB because it already is)
+
+        #inp_img = Image.open(inp_path).convert('RGB')
+        #tar_img = Image.open(tar_path).convert('RGB')
+        
+        #numpy array to tensor
+        inp_img = TF.to_tensor(inp_img)
+        tar_img = TF.to_tensor(tar_img)
 
         # Validate on center crop
         if self.ps is not None:
             inp_img = TF.center_crop(inp_img, (ps, ps))
             tar_img = TF.center_crop(tar_img, (ps, ps))
 
-        inp_img = TF.to_tensor(inp_img)
-        tar_img = TF.to_tensor(tar_img)
+        #inp_img = TF.to_tensor(inp_img) # luis
+        #tar_img = TF.to_tensor(tar_img) # luis
 
         filename = os.path.splitext(os.path.split(tar_path)[-1])[0]
 
