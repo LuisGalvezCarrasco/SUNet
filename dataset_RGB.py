@@ -167,7 +167,7 @@ class DataLoaderTest(Dataset):
         path_inp = self.inp_filenames[index]
         filename = os.path.splitext(os.path.split(path_inp)[-1])[0]
         #inp = Image.open(path_inp).convert('RGB')  # luis
-        inp_img = tiff.imread(inp_path)  # luis
+        inp = tiff.imread(inp_path)  # luis
 
         inp = TF.to_tensor(inp)
         return inp, filename
