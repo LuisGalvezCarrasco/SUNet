@@ -10,6 +10,7 @@ import cv2
 import argparse
 from model.SUNet import SUNet_model
 import yaml
+import tifffile as tiff
 
 with open('training.yaml', 'r') as config:
     opt = yaml.safe_load(config)
@@ -27,7 +28,9 @@ args = parser.parse_args()
 
 
 def save_img(filepath, img):
-    cv2.imwrite(filepath, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+    #cv2.imwrite(filepath, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+    np.save(filepath, img) # luis: I add this line
+
 
 
 def load_checkpoint(model, weights):
@@ -50,7 +53,8 @@ os.makedirs(out_dir, exist_ok=True)
 files = natsorted(glob(os.path.join(inp_dir, '*.jpg'))
                   + glob(os.path.join(inp_dir, '*.JPG'))
                   + glob(os.path.join(inp_dir, '*.png'))
-                  + glob(os.path.join(inp_dir, '*.PNG')))
+                  + glob(os.path.join(inp_dir, '*.PNG'))
+                  + glob(os.path.join(inp_dir, '*.tiff'))) #luis: added .tiff
 
 if len(files) == 0:
     raise Exception(f"No files found at {inp_dir}")
@@ -66,18 +70,23 @@ print('restoring images......')
 
 
 for file_ in files:
-    img = Image.open(file_).convert('RGB')
-    input_ = TF.to_tensor(img).unsqueeze(0).cuda()
+    #img = Image.open(file_).convert('RGB') #luis
+    img = tiff.imread(file_) # luis: to use tiff files
+    input_ = TF.to_tensor(img).float().unsqueeze(0).cuda() #luis : I add .float() to force the tensor to be float32
+    #input_ = TF.to_tensor(img).unsqueeze(0).cuda() # luis: it was the original
+
 
     with torch.no_grad():
         restored = model(input_)
         restored = torch.clamp(restored, 0, 1)
-        restored = restored.permute(0, 2, 3, 1).cpu().detach().numpy()
+        restored = restored.permute(0, 2, 3, 1).cpu().detach().numpy() #obs: restored image output is a numpy array :)
 
     restored = img_as_ubyte(restored[0])
 
     f = os.path.splitext(os.path.split(file_)[-1])[0]
-    save_img((os.path.join(out_dir, f + '.png')), restored)
+    #save_img((os.path.join(out_dir, f + '.png')), restored) #luis: original
+    save_img((os.path.join(out_dir, f + '.npy')), restored) #luis: new one .npy added
+
 
 print(f"Files saved at {out_dir}")
 print('finish !')
