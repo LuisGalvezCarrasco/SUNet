@@ -11,7 +11,7 @@ import argparse
 from model.SUNet import SUNet_model
 import yaml
 import tifffile as tiff
-
+import numpy as np
 with open('training.yaml', 'r') as config:
     opt = yaml.safe_load(config)
 
@@ -57,8 +57,8 @@ files = natsorted(glob(os.path.join(inp_dir, '*.jpg'))
                   + glob(os.path.join(inp_dir, '*.tiff'))
                   + glob(os.path.join(inp_dir, '*.TIFF'))) #luis: added .tiff
 
-#if len(files) == 0:
-#    raise Exception(f"No files found at {inp_dir}")
+if len(files) == 0:
+    raise Exception(f"No files found at {inp_dir}")
 
 # Load corresponding model architecture and weights
 model = SUNet_model(opt)
