@@ -82,7 +82,8 @@ for file_ in files:
         restored = torch.clamp(restored, 0, 1)
         restored = restored.permute(0, 2, 3, 1).cpu().detach().numpy() #obs: restored image output is a numpy array :)
 
-    restored = img_as_ubyte(restored[0])
+    #restored = img_as_ubyte(restored[0]) # luis: I comment this line
+    restored = restored[0] # luis:avoid to convert to unsigned int 8 bits
 
     f = os.path.splitext(os.path.split(file_)[-1])[0]
     #save_img((os.path.join(out_dir, f + '.png')), restored) #luis: original
