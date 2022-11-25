@@ -54,10 +54,11 @@ files = natsorted(glob(os.path.join(inp_dir, '*.jpg'))
                   + glob(os.path.join(inp_dir, '*.JPG'))
                   + glob(os.path.join(inp_dir, '*.png'))
                   + glob(os.path.join(inp_dir, '*.PNG'))
-                  + glob(os.path.join(inp_dir, '*.tiff'))) #luis: added .tiff
+                  + glob(os.path.join(inp_dir, '*.tiff'))
+                  + glob(os.path.join(inp_dir, '*.TIFF'))) #luis: added .tiff
 
-if len(files) == 0:
-    raise Exception(f"No files found at {inp_dir}")
+#if len(files) == 0:
+#    raise Exception(f"No files found at {inp_dir}")
 
 # Load corresponding model architecture and weights
 model = SUNet_model(opt)
