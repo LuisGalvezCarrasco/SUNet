@@ -93,7 +93,7 @@ L1_loss = nn.L1Loss()
 ## DataLoaders
 print('==> Loading datasets')
 train_dataset = get_training_data(train_dir, {'patch_size': Train['TRAIN_PS']})
-train_loader = DataLoader(dataset=train_dataset, batch_size=OPT['BATCH'],shuffle=False,num_workers=0, drop_last=False) #luis: was True
+train_loader = DataLoader(dataset=train_dataset, batch_size=OPT['BATCH'],shuffle=True,num_workers=0, drop_last=False) #luis: was True
 val_dataset = get_validation_data(val_dir, {'patch_size': Train['VAL_PS']})
 val_loader = DataLoader(dataset=val_dataset, batch_size=1, shuffle=False, num_workers=0,drop_last=False)
 
